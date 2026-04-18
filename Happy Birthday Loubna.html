@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joyeux Anniversaire</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Poppins',sans-serif;
+    background:radial-gradient(circle,#1a1a2e,#16213e);
+    overflow:hidden;
+}
+
+/* LOADER */
+.loader{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:#0f172a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    color:white;
+    font-size:24px;
+    letter-spacing:3px;
+    animation:fadeOut 2.5s forwards 2s;
+}
+
+@keyframes fadeOut{
+    to{opacity:0;visibility:hidden;}
+}
+
+/* CARD */
+.card{
+    width:420px;
+    height:600px;
+    border-radius:25px;
+    background:white;
+    box-shadow:0 25px 70px rgba(0,0,0,0.5);
+    text-align:center;
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+    transform:scale(0);
+    animation:pop 1s ease forwards 2.5s;
+}
+
+@keyframes pop{
+    to{transform:scale(1);}
+}
+
+h1{
+    font-size:32px;
+    color:#ff2e63;
+}
+
+.subtitle{
+    margin-top:10px;
+    color:#555;
+}
+
+.cake{
+    font-size:75px;
+    margin:25px 0;
+    animation:float 2s infinite;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-15px);}
+}
+
+.message{
+    color:#444;
+    line-height:1.6;
+}
+
+.name{
+    margin-top:20px;
+    font-weight:bold;
+    color:#16213e;
+}
+
+/* FLASH */
+.flash{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:white;
+    opacity:0;
+    pointer-events:none;
+}
+
+.flash.active{
+    animation:flashAnim 0.4s ease;
+}
+
+@keyframes flashAnim{
+    0%{opacity:1;}
+    100%{opacity:0;}
+}
+
+/* CONFETTI */
+.confetti{
+    position:absolute;
+    width:8px;
+    height:8px;
+    top:-10px;
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    to{transform:translateY(700px) rotate(360deg);}
+}
+
+/* invisible start button */
+#startBtn{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    opacity:0;
+    z-index:1000;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="loader">✨ Surprise... ✨</div>
+<div class="flash" id="flash"></div>
+
+<div class="card">
+    <h1>🎉 Joyeux Anniversaire 🎉</h1>
+    <div class="subtitle">Une journée magique commence...</div>
+
+    <div class="cake">🎂</div>
+
+    <div class="message">
+        Que cette journée soit remplie de bonheur, de joie et de surprises.  
+        Que chaque instant soit unique et inoubliable ✨
+    </div>
+
+    <div class="name">💖 Pour une personne exceptionnelle 💖</div>
+</div>
+
+<!-- invisible button -->
+<button id="startBtn"></button>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b9b9b.mp3?filename=happy-birthday-112194.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let music = document.getElementById("music");
+let btn = document.getElementById("startBtn");
+
+// try autoplay
+window.addEventListener("load", () => {
+    let playPromise = music.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            // wait for first interaction
+            btn.addEventListener("click", () => {
+                music.play();
+                btn.remove();
+            });
+        });
+    }
+});
+
+// flash effect
+function flash(){
+    let f=document.getElementById("flash");
+    f.classList.add("active");
+    setTimeout(()=>f.classList.remove("active"),400);
+}
+
+setTimeout(flash,2500);
+setTimeout(flash,2700);
+setTimeout(flash,2900);
+
+// confetti
+for(let i=0;i<40;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(c);
+}
+</script>
+
+</body>
+</html>
